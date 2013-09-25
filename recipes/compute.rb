@@ -78,13 +78,13 @@ if platform?("ubuntu")
     mode "0644"
     notifies :run, "execute[Update grub]", :immediately
   end
-  
+
   execute "Update grub" do
     command "update-grub2"
     user "root"
     action :nothing
   end
-  
+
   execute "Enable THP" do
     command "echo always > /sys/kernel/mm/transparent_hugepage/enabled"
     user "root"
