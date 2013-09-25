@@ -69,6 +69,29 @@ group node["openstack"]["compute"]["libvirt"]["group"] do
   action :create
 end
 
+# UCLOUDNG-725 : enable THP(transparent hugepage) on all cnodes
+if platform?("ubuntu")
+  cookbook_file "/etc/default/grub" do
+    source "grub"
+    owner "root"
+    group "root"
+    mode "0644"
+    notifies :run, "execute[Update grub]", :immediately
+  end
+  
+  execute "Update grub" do
+    command "update-grub2"
+    user "root"
+    action :nothing
+  end
+  
+  execute "Enable THP" do
+    command "echo always > /sys/kernel/mm/transparent_hugepage/enabled"
+    user "root"
+    action :run
+  end
+end
+
 # Add cgroup_device_acl option to /etc/libvirt/qemu.conf
 cookbook_file "/etc/libvirt/qemu.conf" do
   source "qemu.conf.erb"
