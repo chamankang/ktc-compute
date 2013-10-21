@@ -1,6 +1,9 @@
 ---
 driver_plugin: vagrant
 provisioner: chef_zero
+driver_config:
+  customize:
+    memory: 512
 
 platforms:
 #- name: centos-6.4_chef-11.4.4
@@ -40,6 +43,9 @@ suites:
       server_repl_password: 'repl'
     openstack:
       developer_mode: true
+      network:
+        ng_l3:
+          private_cidr: '172.16.0.0/22'
     authorization:
       sudo:
         users:
